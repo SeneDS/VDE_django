@@ -33,3 +33,14 @@ Ce fichier est dans le projet. C'est le fichier le plus important
 - urls.py:
 à chaque fois que l'on change quelque chose dans notre  base de donnée il faut executer la comande `python manage.py makermigrations`puis `python manage.py migrate`.
 Je peux creer un superultilisateur `python manage.py createsuperuser`
+### 1. creation de notre premiere application ou compsant avec `python manage.py startapp producs`
+cette commande cree un dossier products qui a cette structure:
+├── __init__.py\
+├── admin.py\
+├── apps.py\
+├── migrations\
+│   └── __init__.py\
+├── models.py\
+├── tests.py\
+└── views.py\
+d
