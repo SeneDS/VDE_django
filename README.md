@@ -43,4 +43,54 @@ cette commande cree un dossier products qui a cette structure:
 ├── models.py\
 ├── tests.py\
 └── views.py\
-d
+Apres l'ajout de 'produit' dans le bloc 'INSTALLED_APPS' du fichier settings.py
+Nous nous interessons au fichier models.py de l'applicaton produits. 
+C'est là ou on créé les models de l'application, c'est à dire les tables de l'application.
+#ici on crée la table Produit qui a pour chants: nom, description et prix. Cette table herite de la calsse modele.
+#Pour faire apparettre cete table dans l'interface admin il faut faire la migration
+```
+class Produit(models.Model):
+    nom          = models.CharField()
+    description = models.TextField()
+    prix        = models.IntegerField()
+#NB:  
+"""
+blanck est par défeaut blank=False, noircie le nom du champ
+default=False pour les boleens donne False comme valeur par défaut False
+
+"""
+```
+NB: Les fichiers de migration generés dans le dossier migration constituent **l'historique de migration**
+Ensuite, il faut enregister le modele dans le fichier qui permet d'afficher les tables: c'est le fichier admin.py
+Nous allons donc importer models dans admin qui est dans le meme dossier produits.
+
+
+le code est le suivante
+
+```
+from django.contrib import admin
+from .models import Produit
+
+# Register your models here.
+admin.site.register(Produit) # On enregistre la table Produit
+```
+Une fois cela fait, on a l'application produit et la table produit.
+
+![shell](/Users/etienne/Documents/VDE Python/udemy_django/VDE_dango/produits/img.png)
+
+```
+#On peux faire des enregistrements depuis le terminal
+python manage.py shell
+from produits.models import Produit
+Produit.objects.create(nom='nouveau 3', description='nouveau 3', prix = '30')
+Produit.objects.create(nom='nouveau 3', description='nouveau 3], prix = '30')
+
+#Afficher la liste de tous les produits
+Produit.objects.all()
+#ffecter à une variable
+produit=Produit.objects.all()
+```
+
+Apres toutes modification dans le fichier models.py, il faut generer un fichier de synchronisation avec `python manage.py makermigrations` puis synchroniser `python manage.py migrate` pour propager les modifications aux données précédentes.
+
+### Personnalisation de la page d'accueil 
