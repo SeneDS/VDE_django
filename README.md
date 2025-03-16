@@ -49,12 +49,24 @@ C'est là ou on créé les models de l'application, c'est à dire les tables de 
 #ici on crée la table Produit qui a pour chants: nom, description et prix. Cette table herite de la calsse modele.
 #Pour faire apparettre cete table dans l'interface admin il faut faire la migration
 ```
+from django.db import models
+from django.utils import timezone
+
+# Create your models here.
+#ici on crée la table Produit qui a pour chants: nom, description et prix. Cette table herite de la calsse modele.
+#Pour faire apparettre cete table dans l'interface admin il faut faire la migration
+
 class Produit(models.Model):
-    nom          = models.CharField()
-    description = models.TextField()
-    prix        = models.IntegerField()
-#NB:  
+    nom          = models.CharField(blank=False,  null=False, max_length=220)
+    description = models.TextField(blank=True,  null=True, default="pase de description")
+    prix        = models.DecimalField(blank=False,  null=False,max_digits=10000, decimal_places=2)
+    active      = models.BooleanField(blank=True)
+    is_deleted = models.BooleanField(blank=True, default=False)
+    date = models.DateTimeField(blank=False, default=timezone.now)
+    
+
 """
+#NB:  
 blanck est par défeaut blank=False, noircie le nom du champ
 default=False pour les boleens donne False comme valeur par défaut False
 
@@ -94,3 +106,26 @@ produit=Produit.objects.all()
 Apres toutes modification dans le fichier models.py, il faut generer un fichier de synchronisation avec `python manage.py makermigrations` puis synchroniser `python manage.py migrate` pour propager les modifications aux données précédentes.
 
 ### Personnalisation de la page d'accueil 
+requette et réponse:
+
+On commance par creer un app pages avec `django-admin startapp pages` que l'on refference dans le bloc INSTALLED_APPS settings.py du projet ecommerce.
+
+Puis creer une fonction dans le fichier views.py de l'app (dossier) pages.
+- Premiere vue dans vuews.py
+```
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def heme_view(request, *args, **kwargs):
+    print(request.user)
+    return HttpResponse("<h1>hello world</h1>")
+```
+- Son refferencement dans urls.py
+```
+from pages.views import heme_view
+urlpatterns = [
+path('home', heme_view, name='home'),
+]
+```
+
+### Django templates
