@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}home{% endblock title %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<h1>Page principale</h1>
+{% if liste_1 %}
+<center>
+    {% for element in liste_1  %}
+    <li>
+        {{element}}
+    </li>
+    {%empty%}
+    {% endfor %}
+</center>
+<li>liste vide </li>
+{%endif%}
+    {% if request.user.is_authenticated%}
+        <h1>hello {{request.user.username}}</h1>
+    {% else %}
+       <h1>hello guest</h1>
+    {% endif %}
+
+
+{%include 'section_home.html'%}
+{% endblock content %}
+
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+ <title>{% block title %}Product detail{% endblock title %}</title>
+<h1>Products</h1>
+<p>Welcome to product detail page</p>
+
+<div>
+ <p>{{obj.nom}}</p>
+  <p>{{obj.description}}</p>
+  <p>{{obj.prix}}</p>
+  <p>{{obj.active}}</p>
+ {{obj.date}}
+</div>
+
+<div>{{Product_df|safe}}</div>
+{% endblock %}

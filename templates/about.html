@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}about{% endblock title %}
+
+{% block content %}
+<h1>Page apropos</h1>
+<h3>{{ liste_nombre }}</h3>
+{% for nb in liste_nombre %}
+<li> {{ nb|add:100 }} </li>
+{% endfor %}
+
+<h3>{{ title|capfirst }}</h3>
+
+<h1>{% now "j F Y H:i"%}</h1>
+{% endblock content %}
