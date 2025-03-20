@@ -43,3 +43,17 @@ def contact_view(request, *args, **kwargs):
     return render(request, 'contact.html')
 
 # Create your views here.
+
+from .forms import ProduitForm
+def produit_create_view(request):
+    message = ''
+    if request.method == 'POST':
+        data = request.POST
+        nom = data.get("nom")
+        prix = data.get("prix")
+        description = data.get("description")
+        Produit.objects.create(nom=nom, prix=prix, description=description)
+
+        message = 'produit a été bien enregistré avec succès'
+
+    return render(request, 'produit/create.html', {'message':message})

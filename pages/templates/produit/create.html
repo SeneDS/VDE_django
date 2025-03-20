@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title%} create block {% endblock %}
+
+{% block content %}
+<h1 xmlns="http://www.w3.org/1999/html">Welcome to the create product page</h1>
+    <h1 style="color: green;">{{message}}</h1>
+
+        <form method="post" action="."> {% csrf_token %}
+            <input type="text" name="nom" placeholder="Nom du produit"><br><br>
+            <input type="int" name="prix" placeholder="Prix du produit"><br><br>
+            <input type="text" name="description" placeholder="Description du produit" cols="30" rows="10"></textareabr><br><br>
+            <input type="submit" value="envoyez">
+        </form>
+{% endblock %}
+```

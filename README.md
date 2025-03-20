@@ -354,3 +354,121 @@ processus
 template(html)<== urls <== Vue
 
 ### Filtres personnalisés
+c'est dans cours
+## 7. Formulaires
+#### Moduls formulaires
+Ici nous creons un formulaire permettant d'inserer des informations dans la base de données
+Nous creons un fichier `forms.py`dans l'application `pages`. et un fichier `create.html`dans le dossier `produit` qui est dans template.
+dans le template `create.html`
+```html
+{% extends 'base.html' %}
+
+{% block title%} create block {% endblock %}
+
+{% block content %}
+    <h1 style="color: green;">{{message}}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Create Product">
+        </form>
+{% endblock %}
+```
+dans ce code, la 
+- method="post" → Envoie les données au serveur (soumission de formulaire).
+- {% csrf_token %} → Protection contre les attaques CSRF en Django.
+- {{ form.as_p }} → Affiche un formulaire Django sous forme de paragraphes (<p>).
+- {{ message }} Affiche un message dynamique que genere la viuws.py.
+- Bouton Create Product → Permet de soumettre le formulaire.
+Le backend de ce formulaire est géré par le code suivant qui est dans `views.py`
+
+```python
+from .forms import ProduitForm
+def produit_create_view(request):
+    form = ProduitForm(request.POST or None)
+    message =''
+    if form.is_valid():
+        form.save()
+        message= 'le produit a été bien enregistré'
+        form = ProduitForm()
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+    return render(request, 'produit/create.html', context)
+```
+🚀 Flux de l'utilisateur\
+L'utilisateur visite` /produit/create/` → Il voit un formulaire.
+Il remplit le formulaire et clique sur "Créer".\
+Si le formulaire est valide :
+- Le produit est enregistré en base de données.
+- Un message "Le produit a été bien enregistré" s'affiche.
+- Un nouveau formulaire vide est affiché.
+Cette fonction est reffencée dans les urls.
+Ensuite 
+```python
+from django import forms
+from produits.models import Produit
+
+class ProduitForm(forms.ModelForm):
+    class Meta:
+        model = Produit  # Définir le modèle associé
+        fields = ['nom','description', 'prix']  # Spécifier les champs du formulaire
+
+```
+Nous avons ensuite créé un ficher `forms.py`pour dont le code définit un formulaire Django basé sur le modèle Produit. 
+Son code est utilisé pour créer ou modifier un produit via un formulaire HTML.
+```
+✅ Crée un formulaire Django basé sur le modèle Produit.
+✅ Génère automatiquement les champs nom, description et prix.
+✅ Simplifie l’enregistrement d’un produit sans écrire manuellement un formulaire HTML.
+```
+### HTML formulaires
+Comment developper nos formulaires avec le HTML et les recuperer avec django ?
+Precedament nous avons utilisé django forms pour générer nos formulaire.
+Nous avons sécurisé les données avec le `csrf_token`
+Pour ce faire j'ai modifié le code html du template `create.html`
+```html
+{% extends 'base.html' %}
+
+{% block title%} create block {% endblock %}
+
+{% block content %}
+<h1 xmlns="http://www.w3.org/1999/html">Welcome to the create product page</h1>
+    <h1 style="color: green;">{{message}}</h1>
+
+        <form method="post" action="."> {% csrf_token %}
+            <input type="text" name="nom" placeholder="Nom du produit"><br><br>
+            <input type="int" name="prix" placeholder="Prix du produit"><br><br>
+            <input type="text" name="description" placeholder="Description du produit" cols="30" rows="10"></textareabr><br><br>
+            <input type="submit" value="envoyez">
+        </form>
+{% endblock %}
+```
+
+J'ai également modifié la fonction de la vue 
+```python
+def produit_create_view(request):
+    message = ''
+    if request.method == 'POST':
+        data = request.POST
+        nom = data.get("nom")
+        prix = data.get("prix")
+        description = data.get("description")
+        Produit.objects.create(nom=nom, prix=prix, description=description)
+
+        message = 'produit a été bien enregistré avec succès'
+
+    return render(request, 'produit/create.html', {'message':message})
+```
+explication:
+- Cette vue est basée sur une fonction (FBV - Function-Based View) qui gère l'affichage et la soumission d'un formulaire.
+- On initialise une variable message qui servira à afficher une confirmation à l'utilisateur après l'enregistrement du produit.
+- On Vérifie si le formulaire a été soumis en POST (ce qui signifie que l'utilisateur a cliqué sur "Soumettre").
+- request.POST contient toutes les données envoyées par le formulaire.
+- .get("nom") récupère la valeur du champ nom sans provoquer d'erreur si le champ est absent.
+-Produit est un modèle Django, qui est défini dans models.py.
+- objects.create(...) crée et enregistre directement un nouvel objet en base de données.
+- Une fois le produit créé, on met à jour message pour informer l'utilisateur que l'opération a réussi.
+- La derniere ligne retourne la page create.html dans le dossier produit/, en envoyant le message à afficher dans le template.
