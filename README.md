@@ -425,6 +425,84 @@ Son code est utilisé pour créer ou modifier un produit via un formulaire HTML.
 ✅ Simplifie l’enregistrement d’un produit sans écrire manuellement un formulaire HTML.
 ```
 
+:
+### HTML formulaires
+Comment developper nos formulaires avec le HTML et les recuperer avec django ?
+Precedament nous avons utilisé django forms pour générer nos formulaire.
+Nous avons sécurisé les données avec le `csrf_token`
+Pour ce faire j'ai modifié le code html du template `create.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %} Create Product {% endblock %}
+
+{% block content %}
+    <h1>Welcome to the create product page</h1>
+
+    {% if message %}
+        <h2 style="color: green;">{{ message }}</h2>
+    {% endif %}
+
+    <form method="post" action=".">
+        {% csrf_token %}
+
+        <label for="nom">Nom du produit :</label><br>
+        <input type="text" id="nom" name="nom" placeholder="Nom du produit" required><br><br>
+
+        <label for="prix">Prix du produit :</label><br>
+        <input type="number" id="prix" name="prix" placeholder="Prix du produit" required><br><br>
+
+        <label for="description">Description :</label><br>
+        <textarea id="description" name="description" cols="30" rows="10" placeholder="Description du produit" required></textarea><br><br>
+
+        <input type="submit" value="Envoyer">
+    </form>
+{% endblock %}
+```
+
+Explications:
+- Ce template hérite d'un fichier base.html qui contient la structure de base du site (header, footer, styles CSS, etc.).
+- Il permet de réutiliser une mise en page commune à plusieurs pages.
+- Définit le titre de la page (<title> dans base.html).
+- {% block title %}...{% endblock %} permet d’insérer un contenu dans le <title> de base.html.
+- Tout le contenu entre {% block content %} ... {% endblock %} est inséré à l'endroit où base.html définit {% block content %}.
+- {{ message }} : Variable envoyée par Django depuis la vue (produit_create_view).
+- Elle affiche un message (ex : "Produit enregistré avec succès").
+- Si aucun message n'est défini, rien ne s’affiche.
+- method="post" : Envoie les données en POST (utilisé pour modifier la base de données).
+- action="." : Envoie le formulaire à la même URL que la page actuelle.
+- {% csrf_token %} : Sécurise le formulaire avec un jeton CSRF pour éviter les attaques CSRF.
+- name="nom" : Correspond à request.POST["nom"] dans la vue Django.
+- name="prix" : Correspond à request.POST["prix"] (⚠️ erreur, type="int" n'existe pas, il faut mettre type="number").
+- name="description" : Définit la description du produit.
+- Envoie les données du formulaire à la vue Django (produit_create_view).
+
+J'ai également modifié la fonction de la vue:\
+
+```python
+def produit_create_view(request):
+    message = ''
+    if request.method == 'POST':
+        data = request.POST
+        nom = data.get("nom")
+        prix = data.get("prix")
+        description = data.get("description")
+        Produit.objects.create(nom=nom, prix=prix, description=description)
+        message = 'produit a été bien enregistré avec succès'
+    return render(request, 'produit/create.html', {'message':message})
+```
+Explication:
+- Cette vue est basée sur une fonction (FBV - Function-Based View) qui gère l'affichage et la soumission d'un formulaire.
+- On initialise une variable message qui servira à afficher une confirmation à l'utilisateur après l'enregistrement du produit.
+- On Vérifie si le formulaire a été soumis en POST (ce qui signifie que l'utilisateur a cliqué sur "Soumettre").
+- request.POST contient toutes les données envoyées par le formulaire.
+- .get("nom") récupère la valeur du champ nom sans provoquer d'erreur si le champ est absent.
+-Produit est un modèle Django, qui est défini dans models.py.
+- objects.create(...) crée et enregistre directement un nouvel objet en base de données.
+- Une fois le produit créé, on met à jour message pour informer l'utilisateur que l'opération a réussi.
+- La derniere ligne retourne la page create.html dans le dossier produit/, en envoyant le message à afficher dans le template.
+
 
 
 
