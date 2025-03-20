@@ -11,7 +11,7 @@
 
     <form method="post" action=".">
         {% csrf_token %}
-
+<!--
         <label for="nom">Nom du produit :</label><br>
         <input type="text" id="nom" name="nom" placeholder="Nom du produit" required><br><br>
 
@@ -20,7 +20,8 @@
 
         <label for="description">Description :</label><br>
         <textarea id="description" name="description" cols="30" rows="10" placeholder="Description du produit" required></textarea><br><br>
-
+ -->
+{{form.as_p}}
         <input type="submit" value="Envoyer">
     </form>
 {% endblock %}

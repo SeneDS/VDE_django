@@ -43,7 +43,7 @@ def contact_view(request, *args, **kwargs):
     return render(request, 'contact.html')
 
 # Create your views here.
-
+"""
 from .forms import ProduitForm
 def produit_create_view(request):
     message = ''
@@ -57,3 +57,35 @@ def produit_create_view(request):
         message = 'produit a été bien enregistré avec succès'
 
     return render(request, 'produit/create.html', {'message':message})
+"""
+"""
+from .forms import ProduitForm, PurProduitFrm
+def produit_create_view(request, *args, **kwargs):
+    message=''
+    form = PurProduitFrm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        message = "données enregistrées"
+
+    return render(request, 'produit/create.html', {'message':message, 'form': form})
+"""
+
+
+from django.shortcuts import render
+from .forms import PurProduitFrm  # Import du formulaire
+from produits.models import Produit  # Import du modèle
+
+def produit_create_view(request):
+    message = ''  # Initialisation du message
+    form = PurProduitFrm(request.POST or None)  # Création du formulaire
+
+    if request.method == 'POST':
+        if form.is_valid():  # Vérifie si le formulaire est valide
+            Produit.objects.create(**form.cleaned_data)  # Enregistre en base les ** c'est pour exploser le dictionnaire et si c'est une liste il suffit de mettre une seule étoile *
+            message = '✅ Produit enregistré avec succès !'  # Met à jour le message
+
+            # Réinitialiser le formulaire après soumission
+            form = PurProduitFrm()
+
+    return render(request, 'produit/create.html', {'form': form, 'message': message})
+

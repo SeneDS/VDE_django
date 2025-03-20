@@ -24,6 +24,8 @@ QR codes selon les URL ou les textes entrés par un utilisateur.
 
 ## Notes:
 ### HTML formulaires
+
+### HTML formulaires
 Comment developper nos formulaires avec le HTML et les recuperer avec django ?
 Precedament nous avons utilisé django forms pour générer nos formulaire.
 Nous avons sécurisé les données avec le `csrf_token`
@@ -99,4 +101,62 @@ Explication:
 - objects.create(...) crée et enregistre directement un nouvel objet en base de données.
 - Une fois le produit créé, on met à jour message pour informer l'utilisateur que l'opération a réussi.
 - La derniere ligne retourne la page create.html dans le dossier produit/, en envoyant le message à afficher dans le template.
+
+### Pure Django formulaire (formulaire django pure)
+J'ai modifié le code qui est dans forms. Le formulaire django pure utilisé ici permet de donner des champs encore inexistants (ici l'heritage c'est Form pas Produit). Par exemple je peux ajouter le champ ``` active = forms.BooleanField(required=False)```sans erreur.
+On peut aussi donner valeurs par défeaut avec l'argument `initial="Nom Produit"` par exemple
+```python 
+from django import forms
+class PurProduitFrm(forms.Form):
+    nom = forms.CharField(required=True) # required=True rend le champs obligatoire dans le formulaire du coté backend car la sécurité sur le html ne suffie pas car elle peut etre enlevée
+    description = forms.CharField(required=False)#
+    prix = forms.FloatField()
+    active = forms.BooleanField(required=False, initial=True)
+```
+
+Je modifie ensuite le code dans la vue: en gros, je recupere les données du formulaire `form = ProduitForm(request.POST or None)` s'il y en a que j'enregistre si elles sont valides.
+J'envoie ensuite un message de confirmation
+
+```python
+
+from django.shortcuts import render
+from .forms import PurProduitFrm  # Import du formulaire
+from produits.models import Produit  # Import du modèle
+
+def produit_create_view(request):
+    message = ''  # Initialisation du message
+    form = PurProduitFrm(request.POST or None)  # Création du formulaire
+
+    if request.method == 'POST':
+        if form.is_valid():  # Vérifie si le formulaire est valide
+            Produit.objects.create(**form.cleaned_data)  # Enregistre en base les ** c'est pour exploser le dictionnaire et si c'est une liste il suffit de mettre une seule étoile *
+            message = '✅ Produit enregistré avec succès !'  # Met à jour le message
+
+            # Réinitialiser le formulaire après soumission
+            form = PurProduitFrm()
+
+    return render(request, 'produit/create.html', {'form': form, 'message': message})
+```
+Je vais ensuite récuperer le formulaire via `create.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %} Create Product {% endblock %}
+
+{% block content %}
+    <h1>Welcome to the create product page</h1>
+
+    {% if message %}
+        <h2 style="color: green;">{{ message }}</h2>
+    {% endif %}
+
+    <form method="post" action=".">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Envoyer">
+    </form>
+{% endblock %}
+```
+la methode `as_p` renvoie le formulaire en paragraph, la methode `as_ul` le renvoie en liste.
 
