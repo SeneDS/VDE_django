@@ -63,17 +63,17 @@ Pour ce faire j'ai modifié le code html du template `create.html`
 Explications:
 - Ce template hérite d'un fichier base.html qui contient la structure de base du site (header, footer, styles CSS, etc.).
 - Il permet de réutiliser une mise en page commune à plusieurs pages.
-- Définit le titre de la page (<title> dans base.html).
-- {% block title %}...{% endblock %} permet d’insérer un contenu dans le <title> de base.html.
-- Tout le contenu entre {% block content %} ... {% endblock %} est inséré à l'endroit où base.html définit {% block content %}.
-- {{ message }} : Variable envoyée par Django depuis la vue (produit_create_view).
+- Définit le titre de la page ``(<title>`` dans base.html).
+- ```{% block title %}...{% endblock %}``` permet d’insérer un contenu dans le <title> de base.html.
+- Tout le contenu entre ```{% block content %} ... {% endblock %}``` est inséré à l'endroit où base.html définit {% block content %}.
+- ```{{ message }}``` : Variable envoyée par Django depuis la vue (produit_create_view).
 - Elle affiche un message (ex : "Produit enregistré avec succès").
 - Si aucun message n'est défini, rien ne s’affiche.
 - method="post" : Envoie les données en POST (utilisé pour modifier la base de données).
-- action="." : Envoie le formulaire à la même URL que la page actuelle.
-- {% csrf_token %} : Sécurise le formulaire avec un jeton CSRF pour éviter les attaques CSRF.
-- name="nom" : Correspond à request.POST["nom"] dans la vue Django.
-- name="prix" : Correspond à request.POST["prix"] (⚠️ erreur, type="int" n'existe pas, il faut mettre type="number").
+- ```action="." ```: Envoie le formulaire à la même URL que la page actuelle.
+- ```{% csrf_token %}``` : Sécurise le formulaire avec un jeton CSRF pour éviter les attaques CSRF.
+- name="nom" : Correspond à ```request.POST["nom"]``` dans la vue Django.
+- name="prix" : Correspond à ```request.POST["prix"]``` (⚠️ erreur, type="int" n'existe pas, il faut mettre type="number").
 - name="description" : Définit la description du produit.
 - Envoie les données du formulaire à la vue Django (produit_create_view).
 
