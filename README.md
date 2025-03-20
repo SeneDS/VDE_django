@@ -424,51 +424,7 @@ Son code est utilisé pour créer ou modifier un produit via un formulaire HTML.
 ✅ Génère automatiquement les champs nom, description et prix.
 ✅ Simplifie l’enregistrement d’un produit sans écrire manuellement un formulaire HTML.
 ```
-### HTML formulaires
-Comment developper nos formulaires avec le HTML et les recuperer avec django ?
-Precedament nous avons utilisé django forms pour générer nos formulaire.
-Nous avons sécurisé les données avec le `csrf_token`
-Pour ce faire j'ai modifié le code html du template `create.html`
-```html
-{% extends 'base.html' %}
 
-{% block title%} create block {% endblock %}
 
-{% block content %}
-<h1 xmlns="http://www.w3.org/1999/html">Welcome to the create product page</h1>
-    <h1 style="color: green;">{{message}}</h1>
 
-        <form method="post" action="."> {% csrf_token %}
-            <input type="text" name="nom" placeholder="Nom du produit"><br><br>
-            <input type="int" name="prix" placeholder="Prix du produit"><br><br>
-            <input type="text" name="description" placeholder="Description du produit" cols="30" rows="10"></textareabr><br><br>
-            <input type="submit" value="envoyez">
-        </form>
-{% endblock %}
-```
 
-J'ai également modifié la fonction de la vue 
-```python
-def produit_create_view(request):
-    message = ''
-    if request.method == 'POST':
-        data = request.POST
-        nom = data.get("nom")
-        prix = data.get("prix")
-        description = data.get("description")
-        Produit.objects.create(nom=nom, prix=prix, description=description)
-
-        message = 'produit a été bien enregistré avec succès'
-
-    return render(request, 'produit/create.html', {'message':message})
-```
-explication:
-- Cette vue est basée sur une fonction (FBV - Function-Based View) qui gère l'affichage et la soumission d'un formulaire.
-- On initialise une variable message qui servira à afficher une confirmation à l'utilisateur après l'enregistrement du produit.
-- On Vérifie si le formulaire a été soumis en POST (ce qui signifie que l'utilisateur a cliqué sur "Soumettre").
-- request.POST contient toutes les données envoyées par le formulaire.
-- .get("nom") récupère la valeur du champ nom sans provoquer d'erreur si le champ est absent.
--Produit est un modèle Django, qui est défini dans models.py.
-- objects.create(...) crée et enregistre directement un nouvel objet en base de données.
-- Une fois le produit créé, on met à jour message pour informer l'utilisateur que l'opération a réussi.
-- La derniere ligne retourne la page create.html dans le dossier produit/, en envoyant le message à afficher dans le template.

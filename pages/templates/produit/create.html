@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 
-{% block title%} create block {% endblock %}
+{% block title %} Create Product {% endblock %}
 
 {% block content %}
-<h1 xmlns="http://www.w3.org/1999/html">Welcome to the create product page</h1>
-    <h1 style="color: green;">{{message}}</h1>
+    <h1>Welcome to the create product page</h1>
 
-        <form method="post" action="."> {% csrf_token %}
-            <input type="text" name="nom" placeholder="Nom du produit"><br><br>
-            <input type="int" name="prix" placeholder="Prix du produit"><br><br>
-            <input type="text" name="description" placeholder="Description du produit" cols="30" rows="10"></textareabr><br><br>
-            <input type="submit" value="envoyez">
-        </form>
+    {% if message %}
+        <h2 style="color: green;">{{ message }}</h2>
+    {% endif %}
+
+    <form method="post" action=".">
+        {% csrf_token %}
+
+        <label for="nom">Nom du produit :</label><br>
+        <input type="text" id="nom" name="nom" placeholder="Nom du produit" required><br><br>
+
+        <label for="prix">Prix du produit :</label><br>
+        <input type="number" id="prix" name="prix" placeholder="Prix du produit" required><br><br>
+
+        <label for="description">Description :</label><br>
+        <textarea id="description" name="description" cols="30" rows="10" placeholder="Description du produit" required></textarea><br><br>
+
+        <input type="submit" value="Envoyer">
+    </form>
 {% endblock %}
+
 ```
