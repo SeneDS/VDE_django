@@ -1,18 +1,43 @@
-from symtable import Class
-
 from django import forms
 from produits.models import Produit
 
-#Le formulaire python
+# Formulaire basé sur le modèle
 class ProduitForm(forms.ModelForm):
     class Meta:
-        model = Produit  # Définir le modèle associé
-        fields = ['nom','description', 'prix']  # Spécifier les champs du formulaire
+        model = Produit
+        fields = ['nom', 'description', 'prix']
 
-# Le formulaire django pure: l'interet ici c'est qu'on peut donner des champs encore inexistants (ici l'heritage c'est Form pas Produit)
+
+# Formulaire non lié à un modèle (formulaire pur Django)
 class PurProduitFrm(forms.Form):
-    nom = forms.CharField(required=True) # required=True rend le champs obligatoire dans le formulaire du coté backend car la sécurité sur le html ne suffie pas car elle peut etre enlevée
-    description = forms.CharField(required=False)#
-    prix = forms.FloatField()
-    active = forms.BooleanField(required=False, initial=True)# On peut aussi donner valeurs par défeaut avec l'argument `initial="Nom Produit"` par exemple
-
+    nom = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'name',
+                'placeholder': 'Entrez le nom du produit'
+            }
+        )
+    )
+    description = forms.CharField(
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 5,
+                "cols": 20,
+                "class": "desc",  # 'classe' corrigé en 'class'
+                "id": "description",
+                "placeholder": "Entrez la description du produit"
+            }
+        )
+    )
+    prix = forms.FloatField(
+        required=False,
+        initial=12.6,
+        label="Prix du produit"
+    )
+    active = forms.BooleanField(
+        required=False,
+        initial=True,
+        help_text="Ce champ indique si le produit est actif ou non"
+    )
