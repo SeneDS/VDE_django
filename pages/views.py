@@ -1,22 +1,46 @@
 from lib2to3.fixes.fix_input import context
 import pandas as pd
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from produits.models import Produit
 from .forms import *
-
-
+"""
+# Porduit sous forme de df
 def product_detail_view(request):
     obj=Produit.objects.get(id=2)
     Product_df = pd.DataFrame(Produit.objects.all().values())
     #print(Product_df)
     context ={
         'obj':obj,
-        'Product_df':Product_df.to_html(),
+        'Product_df':Product_df.to_html(index=False),
     }
     return render(request, 'produit/detail.html', context)
+"""
 
+def product_detail_view(request, my_id):
+    #obj=Produit.objects.get(id=my_id)
+    obj = get_object_or_404(Produit, pk=my_id)
+    context ={
+        'obj':obj }
+    return render(request, 'produit/detail.html', context)
+
+# Ici on collecte toutes tous les produits de la base
+def product_list_view(request):
+    queryset = Produit.objects.all()
+    context = {
+        'object_list': queryset
+    }
+    return render(request, 'produit/list.html', context)
+
+
+#Fonction pour la suppression des données
+def product_delete_view(request, my_id):
+    obj = get_object_or_404(Produit, pk=my_id)
+    if request.method == "POST":
+        obj.delete()
+        return redirect('home')  # Rediriger vers la page d'accueil ou autre
+    return render(request, 'produit/delete.html', {'obj': obj})
 
 
 def heme_view(request, *args, **kwargs):

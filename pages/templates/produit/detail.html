@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+{% include 'navbar.html' %}
  <title>{% block title %}Product detail{% endblock title %}</title>
 <h1>Products</h1>
 <p>Welcome to product detail page</p>
 
 <div>
- <p>{{obj.nom}}</p>
-  <p>{{obj.description}}</p>
-  <p>{{obj.prix}}</p>
-  <p>{{obj.active}}</p>
- {{obj.date}}
+  <p>Id : {{obj.id}}</p>
+ <p>Nom : {{obj.nom}}</p>
+  <p>Description : {{obj.description}}</p>
+  <p>Prix : {{obj.prix}}</p>
+  <p>Active : {{obj.active}}</p>
+ <p>Date : {{obj.date}} </p>
 </div>
 
 <div>{{Product_df|safe}}</div>

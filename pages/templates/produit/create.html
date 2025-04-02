@@ -2,10 +2,11 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block title %}Create Product{% endblock %}
+{% block title %}Créer un produit{% endblock %}
 
 {% block content %}
-<div class="container">
+{% include 'navbar.html' %}
+<div class="container mt-5">
     <h1 class="mb-4">Créer un produit</h1>
 
     {% if message %}
@@ -14,15 +15,13 @@
         </div>
     {% endif %}
 
-    <form method="post" class="form">
+    <form method="post" novalidate>
         {% csrf_token %}
-
-        {# Rend le formulaire avec les classes Bootstrap automatiquement #}
         {% bootstrap_form form %}
 
-        <div class="mt-3">
-            {% bootstrap_button button_type="submit" content="Créer le produit" %}
-            {% bootstrap_button button_type="reset" content="Annuler" %}
+        <div class="mt-4 d-flex gap-2">
+            {% bootstrap_button button_type="submit" content="Créer le produit" button_class="btn-primary" %}
+            {% bootstrap_button button_type="reset" content="Annuler" button_class="btn-secondary" %}
         </div>
     </form>
 </div>
@@ -34,28 +33,3 @@
 
 
 
-
-
-<!--
-Sans bootstrap
-
-{% extends 'base.html' %}
-
-{% block title %} Create Product {% endblock %}
-
-{% block content %}
-    <h1>Welcome to the create product page</h1>
-
-    {% if message %}
-        <h2 style="color: green;">{{ message }}</h2>
-    {% endif %}
-
-    <form method="post" action=".">
-        {% csrf_token %}
-{{form.as_p}}
-        <input type="submit" value="Envoyer">
-    </form>
-{% endblock %}
- -->
-
-```

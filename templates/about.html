@@ -2,6 +2,7 @@
 {% block title %}about{% endblock title %}
 
 {% block content %}
+{% include 'navbar.html' %}
 <h1>Page apropos</h1>
 <h3>{{ liste_nombre }}</h3>
 {% for nb in liste_nombre %}

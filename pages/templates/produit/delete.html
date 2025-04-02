@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'navbar.html' %}
+{% block title %}Delete product{% endblock title %}
+<h2> Page de suppression de produit</h2>
+
+<p> Etes vous sure de vouloir supprimer le produit {{obj.nom}} ?</p>
+
+<form method="POST">
+   {% csrf_token %}
+    <input type="submit" value="Supprimer">
+</form>
+{% endblock %}
