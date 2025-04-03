@@ -86,6 +86,9 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 #Ici c'est pour la configuration de la base de données: on peut utiliser n'importequelle(mysql, mongodb, postgres, etc)
+
+"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,6 +96,66 @@ DATABASES = {
     }
 }
 
+#Mongodb
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'nom_de_votre_base',
+        'CLIENT': {
+            'host': 'mongodb+srv://votre_utilisateur:votre_mot_de_passe@votre_cluster.mongodb.net/nom_de_votre_base',
+            'retryWrites': True
+        }
+    }
+}
+
+
+#superbase pip install httpx
+import psycopg2
+from decouple import config
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='5432'),
+    }
+}
+
+
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv("name"),
+        'USER': os.getenv("user"),
+        'PASSWORD': os.getenv("password"),
+        'HOST': os.getenv("host"),
+        'PORT': os.getenv("port", "5432"),  # valeur par défaut au cas où
+    }
+}
+
+"""
+
+############SQL lite
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+ 
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

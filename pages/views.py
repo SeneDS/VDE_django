@@ -110,8 +110,8 @@ def produit_create_view(request):
 ### début de bloc de validation##########################################################
             nom = form.cleaned_data['nom']
             description = form.cleaned_data['description']
-            if nom != 'ES':
-                message =f'❌ Le nom du produit  doit être "ES"'
+            if nom == '':
+                message =f'❌ Le nom du produit  doit être renseigné'
 ### Fin de bloc ##########################################################
             else:
                 Produit.objects.create(**form.cleaned_data) # Enregistre en base les ** c'est pour exploser le dictionnaire et si c'est une liste il suffit de mettre une seule étoile *
