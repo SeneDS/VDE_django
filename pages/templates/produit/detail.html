@@ -1,18 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Détail du produit{% endblock %}
+
 {% block content %}
-{% include 'navbar.html' %}
- <title>{% block title %}Product detail{% endblock title %}</title>
-<h1>Products</h1>
-<p>Welcome to product detail page</p>
+    {% include 'navbar.html' %}
 
-<div>
-  <p>Id : {{obj.id}}</p>
- <p>Nom : {{obj.nom}}</p>
-  <p>Description : {{obj.description}}</p>
-  <p>Prix : {{obj.prix}}</p>
-  <p>Active : {{obj.active}}</p>
- <p>Date : {{obj.date}} </p>
-</div>
+    <div class="container mt-5">
+        <h2>Détails du produit</h2>
 
-<div>{{Product_df|safe}}</div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ obj.nom }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ obj.prix }} XAF</h6>
+                <p class="card-text">{{ obj.description }}</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">ID : {{ obj.id }}</li>
+                    <li class="list-group-item">Actif : {{ obj.active }}</li>
+                    <li class="list-group-item">Créé le : {{ obj.date }}</li>
+                </ul>
+
+                {% if Product_df %}
+                    <div class="mt-3">{{ Product_df|safe }}</div>
+                {% endif %}
+
+                <div class="mt-4 d-flex gap-2">
+                    <a href="{% url 'product_update' obj.id %}" class="btn btn-warning">Modifier</a>
+                    <a href="{% url 'product_delete' obj.id %}" class="btn btn-danger">Supprimer</a>
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

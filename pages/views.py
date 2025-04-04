@@ -24,7 +24,7 @@ def product_detail_view(request, my_id):
     context ={
         'obj':obj }
     return render(request, 'produit/detail.html', context)
-
+"""       
 # Ici on collecte toutes tous les produits de la base
 def product_list_view(request):
     queryset = Produit.objects.all()
@@ -33,9 +33,25 @@ def product_list_view(request):
     }
     return render(request, 'produit/list.html', context)
 
+"""
 
 
+def product_list_view(request):
+    query = request.GET.get('q')
+    produits = Produit.objects.all()
 
+    if query:
+        produits = produits.filter(nom__icontains=query)
+
+    if request.method == 'POST':
+        ids_a_supprimer = request.POST.getlist('produits')
+        Produit.objects.filter(id__in=ids_a_supprimer).delete()
+        return redirect('product_list')
+
+    return render(request, 'produit/list.html', {
+        'object_list': produits,
+        'message': f"Résultats pour : « {query} »" if query else ''
+    })
 
 
 
@@ -47,7 +63,7 @@ def product_delete_view(request, my_id):
     obj = get_object_or_404(Produit, pk=my_id)
     if request.method == "POST":
         obj.delete()
-        return redirect('home')  # Rediriger vers la page d'accueil ou autre
+        return redirect('product_list')  # Rediriger vers la page d'accueil ou autre
     return render(request, 'produit/delete.html', {'obj': obj})
 
 
@@ -119,7 +135,7 @@ def product_update_view(request, my_id):
         if form.is_valid():
             form.save()
             message = '✅ Produit mis à jour avec succès !'
-            return redirect('home')  # Redirection après succès
+            return redirect('product_list')  # Redirection après succès
         else:
             message = '❌ Une erreur est survenue. Veuillez vérifier le formulaire.'
 
