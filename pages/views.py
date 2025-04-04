@@ -25,15 +25,19 @@ def product_detail_view(request, my_id):
         'obj':obj }
     return render(request, 'produit/detail.html', context)
 """       
-# Ici on collecte toutes tous les produits de la base
+
 def product_list_view(request):
     queryset = Produit.objects.all()
     context = {
         'object_list': queryset
     }
+ 
     return render(request, 'produit/list.html', context)
 
 """
+
+
+# Ici on collecte toutes tous les produits de la base
 
 
 def product_list_view(request):
@@ -52,10 +56,6 @@ def product_list_view(request):
         'object_list': produits,
         'message': f"Résultats pour : « {query} »" if query else ''
     })
-
-
-
-
 
 
 #Fonction pour la suppression des données
