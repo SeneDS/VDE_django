@@ -204,3 +204,8 @@ STATIC_URL = 'static/'
 #L'incrementation quand on rajoute des choses dans la base de données
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+}
