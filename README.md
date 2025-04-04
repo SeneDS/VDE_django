@@ -1,5 +1,6 @@
 # VDE_django
 
+
 ### Objectif du cours Udemy:
 Nous allons commencer par les bases fondamentales et progresser graduellement
 vers des concepts plus avancés.
