@@ -34,6 +34,14 @@ def product_list_view(request):
     return render(request, 'produit/list.html', context)
 
 
+
+
+
+
+
+
+
+
 #Fonction pour la suppression des données
 def product_delete_view(request, my_id):
     obj = get_object_or_404(Produit, pk=my_id)
@@ -95,6 +103,32 @@ def produit_create_view(request, *args, **kwargs):
 
     return render(request, 'produit/create.html', {'message':message, 'form': form})
 """
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import ProduitForm
+from produits.models import Produit
+
+def product_update_view(request, my_id):
+    obj = get_object_or_404(Produit, pk=my_id)
+    message = ''
+    form = ProduitForm(request.POST or None, request.FILES or None, instance=obj)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            message = '✅ Produit mis à jour avec succès !'
+            return redirect('home')  # Redirection après succès
+        else:
+            message = '❌ Une erreur est survenue. Veuillez vérifier le formulaire.'
+
+    return render(request, 'produit/update.html', {
+        'form': form,
+        'message': message,
+        'produit': obj
+    })
+
 
 
 from django.shortcuts import render

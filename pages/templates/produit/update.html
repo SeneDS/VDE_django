@@ -1,0 +1,30 @@
+<!-- produit/update.html -->
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Mettre à jour un produit{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Mettre à jour un produit</h1>
+
+    {% if message %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        <div class="mt-4 d-flex gap-2">
+            {% bootstrap_button button_type="submit" content="Mettre à jour" button_class="btn btn-primary" %}
+            <a href="{% url 'home' %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
