@@ -17,6 +17,9 @@ import os
 # # Là c'est la racine du projet.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -200,3 +203,4 @@ STATIC_URL = 'static/'
 
 #L'incrementation quand on rajoute des choses dans la base de données
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
