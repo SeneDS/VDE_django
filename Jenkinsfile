@@ -45,7 +45,7 @@ pipeline {
                 echo "📦 Building Docker image ${IMAGE_NAME}..."
                 sh '''
                     docker build -t ${IMAGE_NAME} .
-                    docker images | grep vde_django
+                    docker tag ${IMAGE_NAME} vde_django:latest
                 '''
             }
         }
